@@ -1,0 +1,7 @@
+target
+src/
+*.class
+*.jar
+*.zip
+*.swp
+..sxr/

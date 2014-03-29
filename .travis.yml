@@ -1,0 +1,12 @@
+language: scala
+
+jdk:
+  - oraclejdk7
+
+script: sbt sxr
+
+env:
+  global:
+    - secure: "BKUEvQ1kQKhR6mf8RJ1PL+EFMGURd6JVl+osXz5Td0OJfeSc7xkhaUKpDSaf86wtDD4Fv+/MPhDU+qhPwmSdpVBqNqpUygZsascWS/gtoSXs4U+GOESMbjZkYpI2GcCh57Di8vN3z/0k4DNU9qjLOOKspgk0zxwPwtKPr32bHK4="
+
+
