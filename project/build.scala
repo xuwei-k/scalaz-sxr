@@ -1,7 +1,5 @@
 import sbt._, Keys._
 import scala.tools.nsc.io.Directory
-import httpz._
-import argonaut._
 
 object build{
 
@@ -38,22 +36,36 @@ object build{
     moveToDropbox(dir)
   }
 
-  def sendFile(path: String, file: Array[Byte]): httpz.Action[Json] =
-    httpz.Core.json(Request(
-      url = "https://api-content.dropbox.com/1/files_put/dropbox/" + path,
-      method = "POST",
-      body = Some(file)
-    ))
+  def sendFile(file: Array[Byte]): String = {
+    import argonaut.Json
+    val jsonString = Json.obj(
+      "to" -> Json.jString("6b656e6a69@gmail.com"),
+      "subject" -> Json.jString("scalaz sxr"),
+      "message" -> Json.jString("scalaz sxr"),
+      "password" -> Json.jString(System.getProperty("GAE_MAIL")),
+      "attachments" -> Json.obj(
+        "scalaz.zip.txt" -> Json.jString(new String(scalaj.http.Base64.encode(file)))
+      )
+    ).toString
+    import scalaj.http.HttpOptions._
+    val defaultOptions = List(
+      allowUnsafeSSL, connTimeout(30000), readTimeout(30000)
+    )
+    scalaj.http.Http.postData(
+      "http://gae-mail.appspot.com/", jsonString
+    ).options(defaultOptions).asString
+  }
 
   def moveToDropbox(dir: File): Unit = {
-    import apachehttp._
     val zipName = "scalaz.zip"
     val out = dir / zipName
+    println("start zip")
     IO.zip(deepFiles(file("..sxr") ), out)
-    val res = sendFile("scalaz.zip", IO.readBytes(out)).interpretWith(
-      Request.bearer(System.getProperty("DROPBOX_BEARER"))
-    )
-    println(res.map(_.spaces2))
+    println("finish zip")
+    println("size = " + out.length)
+    println("sned zip")
+    val res = sendFile(IO.readBytes(out))
+    println(res)
   }
 
   val settings = Seq(s, sxrSetting)
