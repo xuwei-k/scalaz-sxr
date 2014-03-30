@@ -64,8 +64,15 @@ object build{
     println("finish zip")
     println("size = " + out.length)
     println("sned zip")
-    val res = sendFile(IO.readBytes(out))
-    println(res)
+    try {
+      val res = sendFile(IO.readBytes(out))
+      println(res)
+    } catch {
+      case e: scalaj.http.HttpException =>
+        scala.Console.err.println(e)
+        scala.Console.err.println(e.body)
+        throw e
+    }
   }
 
   val settings = Seq(s, sxrSetting)
