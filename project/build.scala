@@ -37,22 +37,22 @@ object build{
   }
 
   def sendFile(file: Array[Byte]): String = {
-    import argonaut.Json
-    val jsonString = Json.obj(
-      "to" -> Json.jString("6b656e6a69@gmail.com"),
-      "subject" -> Json.jString("scalaz sxr"),
-      "message" -> Json.jString("scalaz sxr"),
-      "password" -> Json.jString(System.getProperty("GAE_MAIL")),
-      "attachments" -> Json.obj(
-        "scalaz.zip.txt" -> Json.jString(new String(scalaj.http.Base64.encode(file)))
+    import org.json4s._, native._
+    val json = JObject(List(
+      "to" -> JString("6b656e6a69@gmail.com"),
+      "subject" -> JString("scalaz sxr"),
+      "message" -> JString("scalaz sxr"),
+      "password" -> JString(System.getProperty("GAE_MAIL")),
+      "attachments" -> JObject(
+        "scalaz.zip.txt" -> JString(new String(scalaj.http.Base64.encode(file)))
       )
-    ).toString
+    ))
     import scalaj.http.HttpOptions._
     val defaultOptions = List(
       allowUnsafeSSL, connTimeout(30000), readTimeout(30000)
     )
     scalaj.http.Http.postData(
-      "http://gae-mail.appspot.com/", jsonString
+      "http://gae-mail.appspot.com/", compactJson(renderJValue(json))
     ).options(defaultOptions).asString
   }
 

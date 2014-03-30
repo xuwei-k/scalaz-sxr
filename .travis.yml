@@ -7,7 +7,5 @@ script: sbt sxr
 
 env:
   global:
-    - secure: "GNQ9sXoZ5WnyAewWNmhTD+2JuB1Oi26YF9QhY/M1ZkR1wRX07ZhLdVqjZUCvMHjaR3f3K/wrKF7Zsr1Q3g0fze9NHFkKFDkklO0ApKo6t9Dl7YFHrSrB4tRaWmIZ+Uh8fa2jlPk2aWtyEQQVEM5wxPuTPA/5y5iav03ADqa8y54="
-
-
+    - secure: "LnaJQvnjTiSzw9kTH/IHqvfCkcPtCFbMQD5jRopXNlPdO7YpgCyMkpBlDTvXmYkHv+NOibJgfjarDKRr4OA0sUYphAuuAhe5sK+a53Oe5UbQ5j60jRgnys0c6X8i99c6PxrU1Nyx4uGgGPoCNhtoKJe6Xd64Q55YRPL9Ayt4pVY="
 
