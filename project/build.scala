@@ -36,13 +36,15 @@ object build{
     moveToDropbox(dir)
   }
 
+  val gaeMailPass = sys.env("GAE_MAIL")
+
   def sendFile(file: Array[Byte]): String = {
     import org.json4s._, native._
     val json = JObject(List(
       "to" -> JString("6b656e6a69@gmail.com"),
       "subject" -> JString("scalaz sxr"),
       "message" -> JString("scalaz sxr"),
-      "password" -> JString(System.getProperty("GAE_MAIL")),
+      "password" -> JString(gaeMailPass),
       "attachments" -> JObject(
         "scalaz.zip.txt" -> JString(new String(scalaj.http.Base64.encode(file)))
       )
