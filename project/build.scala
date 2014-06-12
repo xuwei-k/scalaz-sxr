@@ -81,7 +81,7 @@ object build{
 
   val modules = Seq(
     "core", "concurrent", "effect", "iteratee", "xml" //, "example","typelevel",
-    ,"scalacheck-binding", "task"
+    ,"scalacheck-binding" // , "task"
   )
 
   def deepFiles(base: File): Seq[(File, String)] = {
