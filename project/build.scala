@@ -4,7 +4,7 @@ import scala.tools.nsc.io.Directory
 object build{
 
   val user = "scalaz"
-  val branch = "scalaz-seven"
+  val branch = "series/7.1.x"
 
   val zipUrl = "https://github.com/" + user + "/scalaz/archive/" + branch  + ".zip"
 
