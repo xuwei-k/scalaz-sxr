@@ -4,7 +4,7 @@ import scala.tools.nsc.io.Directory
 object build{
 
   val user = "scalaz"
-  val branch = "series/7.1.x"
+  val branch = "series/7.2.x"
 
   val zipUrl = "https://github.com/" + user + "/scalaz/archive/" + branch  + ".zip"
 
@@ -80,8 +80,7 @@ object build{
   val settings = Seq(s, sxrSetting)
 
   val modules = Seq(
-    "core", "concurrent", "effect", "iteratee", "xml" //, "example","typelevel",
-    ,"scalacheck-binding" // , "task"
+    "core", "concurrent", "effect", "iteratee", "scalacheck-binding"
   )
 
   def deepFiles(base: File): Seq[(File, String)] = {
