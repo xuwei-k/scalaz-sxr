@@ -33,7 +33,7 @@ object build{
   val sxr = TaskKey[Unit]("sxr")
 
   lazy val sxrSetting = sxr <<= (compile in Compile, crossTarget).map{ (_, dir) =>
-    moveToDropbox(dir)
+    zipAndSend(dir)
   }
 
   val gaeMailPass = sys.env("GAE_MAIL")
@@ -58,11 +58,11 @@ object build{
     ).options(defaultOptions).asString
   }
 
-  def moveToDropbox(dir: File): Unit = {
+  def zipAndSend(dir: File): Unit = {
     val zipName = "scalaz.zip"
     val out = dir / zipName
     println("start zip")
-    IO.zip(deepFiles(file("..sxr") ), out)
+    IO.zip(deepFiles(dir / "classes.sxr"), out)
     println("finish zip")
     println("size = " + out.length)
     println("sned zip")
@@ -97,7 +97,6 @@ object build{
       mv(m, "main")
     }
     mv("tests", "test")
-    IO.delete(to / "scala/tests/typelevel")
     to ** "*.scala" get
   }
 
