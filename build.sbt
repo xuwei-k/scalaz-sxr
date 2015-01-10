@@ -2,6 +2,10 @@ resolvers += "bintray/paulp" at "https://dl.bintray.com/paulp/maven"
 
 addCompilerPlugin("org.improving" %% "sxr" % "1.0.1")
 
+resolvers += "bintray/non" at "http://dl.bintray.com/non/maven"
+
+addCompilerPlugin("org.spire-math" % "kind-projector" % "0.5.2"  cross CrossVersion.binary)
+
 scalaVersion := "2.10.4"
 
 scalacOptions <+= (sourceDirectories in Compile).map{
