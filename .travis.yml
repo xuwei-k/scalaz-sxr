@@ -3,7 +3,13 @@ language: scala
 jdk:
   - oraclejdk7
 
-script: sbt sxr
+cache:
+  directories:
+    - $HOME/.ivy2/cache
+
+script:
+  - sbt sxr
+  - find $HOME/.ivy2 -name "ivydata-*.properties" | xargs rm
 
 env:
   global:
