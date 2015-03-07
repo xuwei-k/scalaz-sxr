@@ -14,29 +14,33 @@ object build{
     }
   )
 
-  val s = sourceGenerators in Compile <+= (sourceDirectory in Compile){
-    d =>
-    task{
-      IO.withTemporaryDirectory{ tmp =>
-        println("downloading from " + zipUrl)
-        IO.unzipURL(
-          url(zipUrl)
-          ,tmp
-          ,filter
-        )
-        println("download complete " + zipUrl)
-        mvFiles(tmp / ("scalaz-" + branch.replace('/', '-')), d)
-      }
-    }
-  }
-
   val sxr = TaskKey[Unit]("sxr")
+  val zip = TaskKey[Unit]("zip")
 
-  lazy val sxrSetting = sxr <<= (compile in Compile, crossTarget).map{ (_, dir) =>
-    zipAndSend(dir)
-  }
+  lazy val settings: Seq[Def.Setting[_]] = Seq(
+    sourceGenerators in Compile <+= (sourceDirectory in Compile){ d =>
+      task{
+        IO.withTemporaryDirectory{ tmp =>
+          println("downloading from " + zipUrl)
+          IO.unzipURL(
+            url(zipUrl)
+            ,tmp
+            ,filter
+          )
+          println("download complete " + zipUrl)
+          mvFiles(tmp / ("scalaz-" + branch.replace('/', '-')), d)
+        }
+      }
+    },
+    sxr <<= (compile in Compile, crossTarget).map{ (_, dir) =>
+      zipAndSend(dir)
+    },
+    zip <<= (compile in Compile, crossTarget).map{ (_, dir) =>
+      zip(dir)
+    }
+  )
 
-  val gaeMailPass = sys.env("GAE_MAIL")
+  lazy val gaeMailPass = sys.env("GAE_MAIL")
 
   def sendFile(file: Array[Byte]): String = {
     import org.json4s._, native._
@@ -58,13 +62,19 @@ object build{
     ).options(defaultOptions).asString
   }
 
-  def zipAndSend(dir: File): Unit = {
-    val zipName = "scalaz.zip"
+  private[this] final val zipName = "scalaz.zip"
+
+  def zip(dir: File): Unit = {
     val out = dir / zipName
     println("start zip")
     IO.zip(deepFiles(dir / "classes.sxr"), out)
     println("finish zip")
     println("size = " + out.length)
+  }
+
+  def zipAndSend(dir: File): Unit = {
+    val out = dir / zipName
+    zip(dir)
     println("sned zip")
     try {
       val res = sendFile(IO.readBytes(out))
@@ -76,8 +86,6 @@ object build{
         throw e
     }
   }
-
-  val settings = Seq(s, sxrSetting)
 
   val modules = Seq(
     "core", "concurrent", "effect", "iteratee", "scalacheck-binding"
