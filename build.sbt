@@ -4,9 +4,9 @@ addCompilerPlugin("org.improving" %% "sxr" % "1.0.1")
 
 resolvers += "bintray/non" at "http://dl.bintray.com/non/maven"
 
-addCompilerPlugin("org.spire-math" % "kind-projector" % "0.5.2"  cross CrossVersion.binary)
+addCompilerPlugin("org.spire-math" % "kind-projector" % "0.5.4" cross CrossVersion.binary)
 
-scalaVersion := "2.10.4"
+scalaVersion := "2.10.5"
 
 scalacOptions <+= (sourceDirectories in Compile).map{
   "-P:sxr:base-directory:" + _.mkString(":")
@@ -15,7 +15,7 @@ scalacOptions <+= (sourceDirectories in Compile).map{
 build.settings
 
 libraryDependencies ++= Seq(
-  "org.scalacheck" %% "scalacheck" % "1.12.2"
+  "org.scalacheck" %% "scalacheck" % "1.12.4"
 )
 
 sourceGenerators in Compile += task(Seq(GenerateTupleW(baseDirectory.value / "src/main/scala")))
