@@ -17,3 +17,4 @@ libraryDependencies ++= Seq(
 )
 
 sourceGenerators in Compile += task(Seq(GenerateTupleW(baseDirectory.value / "src/main/scala")))
+sourceGenerators in Compile += task(Seq(TupleNInstances(baseDirectory.value / "src/main/scala")))
