@@ -13,7 +13,7 @@ scalacOptions <+= (sourceDirectories in Compile).map{
 build.settings
 
 libraryDependencies ++= Seq(
-  "org.scalacheck" %% "scalacheck" % "1.12.4"
+  "org.scalacheck" %% "scalacheck" % "1.12.5"
 )
 
 sourceGenerators in Compile += task(Seq(GenerateTupleW(baseDirectory.value / "src/main/scala")))
